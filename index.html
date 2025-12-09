@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostell Area</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-image: url('https://files.catbox.moe/xnxin2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Dark overlay for better text readability */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    /* Header Styles */
+    .header {
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(15px);
+      border-bottom: 2px solid #444;
+      padding: 25px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 30px;
+    }
+
+    .header-title-link {
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .header h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffd166);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease-in-out infinite;
+      text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      position: relative;
+      padding-right: 20px;
+      cursor: pointer;
+    }
+
+    .header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+
+    .header h1:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .nav-item {
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+    }
+
+    .nav-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .nav-item:hover::before {
+      left: 100%;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .nav-item:hover {
+      transform: scale(1.1);
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Running Text Announcement Bar */
+    .announcement {
+      background: white;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+      border-bottom: 2px solid #ddd;
+      overflow: hidden;
+    }
+
+    .announcement-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .announcement-text {
+      animation: slideText 15s linear infinite;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    @keyframes slideText {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .card-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 60px;
+    }
+
+    /* Horizontal Card Grid */
+    .card-grid {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .card {
+      position: relative;
+      width: 320px;
+      height: 420px;
+      border-radius: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 2px solid transparent;
+      background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+      flex-shrink: 0;
+      text-decoration: none;
+      display: block;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+      border-radius: 15px;
+    }
+
+    .card:hover::before {
+      opacity: 0.1;
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 65%;
+      background-size: cover;
+      background-position: center;
+      transition: all 0.5s ease;
+      position: relative;
+    }
+
+    /* Different images for each card */
+    .card:nth-child(1) .card-image {
+      background-image: url('https://files.catbox.moe/xnxin2.jpg');
+      filter: brightness(0.8);
+    }
+
+    .card:nth-child(2) .card-image {
+      background-image: url('https://files.catbox.moe/xnxin2.jpg');
+      filter: sepia(0.3) brightness(0.8);
+    }
+
+    .card:nth-child(3) .card-image {
+      background-image: url('https://files.catbox.moe/xnxin2.jpg');
+      filter: hue-rotate(180deg) brightness(0.8);
+    }
+
+    .card-image.focused {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+      border: 3px solid rgba(255, 255, 255, 0.5);
+      border-radius: 10px;
+    }
+
+    .card-info {
+      flex: 1;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.85);
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .card-description {
+      font-size: 0.9rem;
+      color: #ccc;
+      line-height: 1.4;
+      margin-bottom: 15px;
+    }
+
+    .card-action {
+      font-size: 0.8rem;
+      color: #4ecdc4;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Status Messages - Centered on Image */
+    .card-status {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0;
+      transition: all 0.4s ease;
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      text-align: center;
+      min-width: 140px;
+      z-index: 10;
+    }
+
+    .card-status.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .card-status.on-sale {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.9), rgba(0, 204, 106, 0.9));
+      color: #000;
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-status.release-soon {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.9), rgba(238, 90, 82, 0.9));
+      color: #fff;
+      box-shadow: 0 0 30px rgba(255, 107, 107, 0.6);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-status.access {
+      background: linear-gradient(135deg, rgba(78, 205, 196, 0.9), rgba(69, 183, 209, 0.9));
+      color: #000;
+      box-shadow: 0 0 30px rgba(78, 205, 196, 0.6);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.05);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    /* How Hostell Formed Section - Warna Maroon */
+    .formation-section {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      padding: 40px;
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .formation-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #8B0000, #A52A2A, #800000); /* Warna maroon */
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      background: linear-gradient(45deg, #8B0000, #A52A2A); /* Warna maroon */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #A52A2A, transparent); /* Warna maroon */
+    }
+
+    .formation-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #e0e0e0;
+      text-align: justify;
+    }
+
+    /* Ubah warna highlight menjadi maroon */
+    .formation-highlight {
+      color: #A52A2A; /* Warna maroon */
+      font-weight: bold;
+      font-style: italic;
+    }
+
+    .formation-quote {
+      background: rgba(30, 30, 30, 0.7);
+      border-left: 4px solid #8B0000; /* Warna maroon */
+      padding: 20px;
+      margin: 25px 0;
+      font-style: italic;
+      font-size: 1.2rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .formation-milestones {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .milestone {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .milestone:hover {
+      transform: translateY(-5px);
+      border-color: #A52A2A; /* Warna maroon */
+    }
+
+    /* Ubah warna milestone year menjadi maroon */
+    .milestone-year {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #8B0000; /* Warna maroon */
+      margin-bottom: 10px;
+    }
+
+    .milestone-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .milestone-desc {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    /* Simple Announcement Section Below Images */
+    .bottom-announcement {
+      background: rgba(0, 0, 0, 0.85);
+      border-top: 2px solid #333;
+      padding: 40px 20px;
+      margin-top: 40px;
+    }
+
+    .bottom-announcement-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .announcement-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .announcement-paragraph {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: white;
+      text-align: justify;
+    }
+
+    /* Footer Styles */
+    .footer {
+      background: rgba(0, 0, 0, 0.9);
+      border-top: 1px solid #333;
+      padding: 30px 0;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .footer-links a:hover {
+      color: #A52A2A; /* Warna maroon */
+    }
+
+    .footer-bottom {
+      color: #888;
+      font-size: 0.8rem;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .header h1 {
+        font-size: 2.3rem;
+      }
+      
+      .card {
+        width: 280px;
+        height: 380px;
+      }
+      
+      .card-grid {
+        gap: 15px;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+      
+      .formation-section {
+        padding: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 20px 0;
+      }
+      
+      .header h1 {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+      }
+
+      .nav-item {
+        font-size: 1rem;
+        padding: 8px 12px;
+      }
+
+      .nav-right {
+        gap: 20px;
+      }
+
+      .announcement {
+        font-size: 0.9rem;
+        padding: 10px 0;
+      }
+
+      .card {
+        width: 240px;
+        height: 340px;
+      }
+
+      .card-grid {
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .card-info {
+        padding: 20px;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+      }
+
+      .card-description {
+        font-size: 0.8rem;
+      }
+
+      .card-status {
+        font-size: 0.8rem;
+        padding: 8px 16px;
+        min-width: 100px;
+      }
+      
+      .formation-section {
+        padding: 25px 20px;
+        margin-bottom: 40px;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .formation-content {
+        font-size: 1rem;
+      }
+      
+      .formation-quote {
+        font-size: 1rem;
+        padding: 15px;
+      }
+      
+      .milestone {
+        min-width: 150px;
+      }
+
+      .announcement-title {
+        font-size: 1.5rem;
+      }
+
+      .announcement-paragraph {
+        font-size: 0.9rem;
+        text-align: left;
+      }
+
+      .footer-links {
+        gap: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-content {
+        padding: 0 15px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .header h1 {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+        text-align: center;
+        width: 100%;
+      }
+
+      .nav-right {
+        gap: 10px;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-item {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+      }
+
+      .main-content {
+        padding: 20px 10px;
+      }
+
+      .card-grid {
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 20px;
+      }
+
+      .card {
+        width: 220px;
+        height: 320px;
+      }
+
+      .card-status {
+        font-size: 0.7rem;
+        padding: 6px 12px;
+        min-width: 80px;
+      }
+      
+      .formation-section {
+        padding: 20px 15px;
+        margin-bottom: 30px;
+      }
+      
+      .section-title {
+        font-size: 1.3rem;
+      }
+      
+      .formation-content {
+        font-size: 0.9rem;
+      }
+      
+      .formation-quote {
+        font-size: 0.9rem;
+        padding: 10px;
+      }
+      
+      .formation-milestones {
+        flex-direction: column;
+      }
+      
+      .milestone {
+        min-width: 100%;
+      }
+
+      .bottom-announcement {
+        padding: 20px 15px;
+      }
+
+      .announcement-title {
+        font-size: 1.3rem;
+      }
+
+      .announcement-paragraph {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header dengan link ke admin.html -->
+  <header class="header">
+    <div class="header-content">
+      <a href="admin.html" class="header-title-link">
+        <h1>HOSTELL AREA</h1>
+      </a>
+      <div class="nav-right">
+        <a href="index.html" class="nav-item">Home</a>
+        <a href="registration.html" class="nav-item">Registration</a>
+        <a href="documentation.html" class="nav-item">Docs</a>
+        <a href="social.html" class="nav-item">Links</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Running Text Announcement Bar -->
+  <div class="announcement">
+    <div class="announcement-content">
+      <div class="announcement-text">
+        🔥 WELCOME TO HOSTELL AREA • JOIN THE CREW • GET CONNECTED • SHARE THE VIBE • REP THE STREETS • LIMITED SLOTS AVAILABLE • DON'T SLEEP ON THIS •
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="card-container">
+      <div class="card-grid">
+        <!-- Card 1: Registration Page -->
+        <a href="registration.html" class="card">
+          <div class="card-content">
+            <div class="card-image">
+              <div class="card-status access">Join The Crew</div>
+            </div>
+            <div class="card-info">
+              <div class="card-title">REGISTRATION INFO</div>
+              <div class="card-description">Ain't got nothin' better to do? Join the Hostell crew. Fill out the form, get vetted, and become part of the family. Limited spots available for real ones only.</div>
+              <div class="card-action">CLICK TO REGISTER →</div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2: Documentation Page -->
+        <a href="documentation.html" class="card">
+          <div class="card-content">
+            <div class="card-image">
+              <div class="card-status on-sale">Knowledge Base</div>
+            </div>
+            <div class="card-info">
+              <div class="card-title">United as One</div>
+              <div class="card-description">Slide through the Hostell Area moments. Squad energy, street spirit, real fam.</div>
+              <div class="card-action">VIEW DOCUMENTATION →</div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3: Social Media Links Page -->
+        <a href="social.html" class="card">
+          <div class="card-content">
+            <div class="card-image">
+              <div class="card-status release-soon">Connect With Us</div>
+            </div>
+            <div class="card-info">
+              <div class="card-title">Media Social</div>
+              <div class="card-description">All our links in one spot. Telegram, Instagram, Discord – wherever we post, you'll find it here. Stay updated on drops, events, and crew movements.</div>
+              <div class="card-action">CHECK OUR LINKS →</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    
+<!-- How Hostell Formed Section dengan warna maroon -->
+<section class="formation-section">
+  <h2 class="section-title">How Hostell Formed</h2>
+  
+  <div class="formation-content">
+    <p>Hostell Area has a unique origin story that began on <span class="formation-highlight">February 7, 2024</span>, when two founders - <span class="formation-highlight">Chaelino & 2Pac</span> - came together with the original owner <span class="formation-highlight">Cece</span>. The name "Hostell" was inspired by a popular manga, and thus <span class="formation-highlight">Hostell Fams</span> was born.</p>
+    
+    <div class="formation-quote">
+      "We started with just a vision and brotherhood. From two founders and an owner to a family of hundreds."
+    </div>
+    
+    <p>From its inception on February 7, 2024, Hostell Fams grew rapidly, reaching an impressive <span class="formation-highlight">700 active members on WhatsApp</span>. The community was vibrant and active, creating a strong sense of belonging among its members.</p>
+    
+    <p>However, by mid-to-late 2024, the community went through a period of <span class="formation-highlight">hiatus (vakum)</span> as activities slowed down. This quiet period was followed by a <span class="formation-highlight">rebirth in December 2024</span>, when the community was revived as <span class="formation-highlight">Hostell Reborn</span>.</p>
+    
+    <p>The rebirth was short-lived due to <span class="formation-highlight">internal conflicts</span> that emerged within the community. Faced with these challenges and an overwhelming number of people wanting to join, the difficult decision was made to <span class="formation-highlight">temporarily deactivate</span> the community to regroup and restructure.</p>
+    
+    <p>On <span class="formation-highlight">November 26, 2025</span>, Hostell made its triumphant return, now rebranded as <span class="formation-highlight">Hostell Area</span> under new leadership. The community is currently owned and guided by <span class="formation-highlight">Pabloo</span>, who is steering Hostell Area toward a new chapter of growth, unity, and street culture excellence.</p>
+    
+    <p>Today, Hostell Area stands as more than just a crew – it's a phoenix that rose from its ashes, stronger and more determined. We've learned from our past, evolved through our challenges, and emerged with a clearer vision: to create a space where real ones can connect, grow, and represent authentic street culture without compromise.</p>
+  </div>
+  
+  <div class="formation-milestones">
+    <div class="milestone">
+      <div class="milestone-year">Feb 7, 2024</div>
+      <div class="milestone-title">Foundation</div>
+      <div class="milestone-desc">Founded by Chaelino & 2Pac, owned by Cece. Named after a manga inspiration.</div>
+    </div>
+    
+    <div class="milestone">
+      <div class="milestone-year">2024</div>
+      <div class="milestone-title">Rapid Growth</div>
+      <div class="milestone-desc">Reached 700 active WhatsApp members as Hostell Fams.</div>
+    </div>
+    
+    <div class="milestone">
+      <div class="milestone-year">Dec 2024</div>
+      <div class="milestone-title">First Rebirth</div>
+      <div class="milestone-desc">Returned as Hostell Reborn after hiatus period.</div>
+    </div>
+    
+    <div class="milestone">
+      <div class="milestone-year">Nov 26, 2025</div>
+      <div class="milestone-title">Hostell Area Era</div>
+      <div class="milestone-desc">Final rebirth as Hostell Area, now owned by Pabloo n led by Acel.</div>
+    </div>
+  </div>
+</section>
+
+  <!-- Simple Bottom Announcement Section -->
+  <section class="bottom-announcement">
+    <div class="bottom-announcement-content">
+      <h2 class="announcement-title">HOSTELL AREA - STREET COLLECTIVE</h2>
+      <p class="announcement-paragraph">
+        Yo homies, thanks for sliding through the Hostell Area zone. Out here, it’s all about loyalty, respect, and keeping it real with the fam. We move together, we rise together, and we keep this gang energy alive every single day. No cap, no fake love — only real ones roll with us. Stay locked in, stay solid, and keep reppin’ the Hostell Area wherever you go. Much love, homies. We out.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="registration.html">Join The Crew</a>
+        <a href="documentation.html">Crew Rules</a>
+        <a href="social.html">Connect</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact The Fam</a>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 HOSTELL AREA. ALL RIGHTS RESERVED. | STREET CODE. CREW FIRST. STAY REAL.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Add hover effect to cards
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px) scale(1.05)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+      });
+    });
+
+    // Add click effects for navigation items
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function(event) {
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1.1)';
+        }, 100);
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 200);
+        
+        // Add visual feedback for clicked nav item
+        this.style.background = 'rgba(255, 255, 255, 0.2)';
+        setTimeout(() => {
+          this.style.background = '';
+        }, 300);
+      });
+    });
+    
+    // Add effect to header
+    document.querySelector('.header h1').addEventListener('mouseenter', function() {
+      this.style.textShadow = '0 0 20px rgba(78, 205, 196, 0.8)';
+    });
+    
+    document.querySelector('.header h1').addEventListener('mouseleave', function() {
+      this.style.textShadow = '0 5px 15px rgba(0, 0, 0, 0.5)';
+    });
+    
+    // Add hover effect to milestones
+    document.querySelectorAll('.milestone').forEach(milestone => {
+      milestone.addEventListener('mouseenter', function() {
+        this.style.boxShadow = '0 10px 20px rgba(165, 42, 42, 0.3)'; /* Warna maroon */
+      });
+      
+      milestone.addEventListener('mouseleave', function() {
+        this.style.boxShadow = 'none';
+      });
+    });
+  </script>
+</body>
+</html>
