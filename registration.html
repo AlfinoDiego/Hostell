@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join The Crew - Hostell Area</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-image: url('https://files.catbox.moe/xnxin2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: -1;
+    }
+
+    /* Header Styles */
+    .header {
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 2px solid #444;
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .registration-container {
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: 15px;
+      padding: 40px;
+      width: 100%;
+      max-width: 600px;
+      border: 2px solid #444;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #4ecdc4;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .page-subtitle {
+      text-align: center;
+      color: #ccc;
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #fff;
+      font-size: 1.1rem;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #444;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #4ecdc4;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .form-textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .checkbox-group input {
+      width: 20px;
+      height: 20px;
+    }
+
+    .checkbox-group label {
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+
+    .checkbox-group a {
+      color: #4ecdc4;
+      text-decoration: none;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .status-message {
+      text-align: center;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .status-message.success {
+      background: rgba(0, 255, 136, 0.2);
+      border: 1px solid #00ff88;
+      color: #00ff88;
+      display: block;
+    }
+
+    .status-message.error {
+      background: rgba(255, 107, 107, 0.2);
+      border: 1px solid #ff6b6b;
+      color: #ff6b6b;
+      display: block;
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(0, 0, 0, 0.9);
+      border-top: 1px solid #333;
+      padding: 20px 0;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer p {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .registration-container {
+        padding: 30px 20px;
+      }
+      
+      .page-title {
+        font-size: 2rem;
+      }
+      
+      .form-label {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .registration-container {
+        padding: 20px 15px;
+      }
+      
+      .page-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">HOSTELL AREA</a>
+      <a href="index.html" class="back-btn">← BACK TO HOME</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="registration-container">
+      <h1 class="page-title">JOIN THE CREW</h1>
+      <p class="page-subtitle">Fill out this form to apply for the Hostell Area collective. We're lookin' for real ones only.</p>
+      
+      <form id="registrationForm">
+        <div class="form-group">
+          <label class="form-label">HIDEAWAY NICKNAME</label>
+          <input type="text" class="form-input" placeholder="Enter your Hideaway Name" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">REAL NAME (CONFIDENTIAL)</label>
+          <input type="text" class="form-input" placeholder="For verification purposes only" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <input type="email" class="form-input" placeholder="Your Age" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">PHONE NUMBER</label>
+          <input type="tel" class="form-input" placeholder="For urgent communications" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">CITY / TURF</label>
+          <input type="text" class="form-input" placeholder="Where you rep from" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">WHY YOU WANNA JOIN?</label>
+          <select class="form-select" required>
+            <option value="">Select your reason</option>
+            <option value="community">Connect with like-minded individuals</option>
+            <option value="brand">Rep the Hostell brand</option>
+            <option value="events">Access to exclusive events</option>
+            <option value="network">Build my network</option>
+            <option value="other">Other reason</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">TELL US ABOUT YOURSELF</label>
+          <textarea class="form-textarea" placeholder="What makes you a real one? What skills, connections, or energy do you bring to the crew?" required></textarea>
+        </div>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">I agree to the <a href="documentation.html#rules">Crew Rules & Guidelines</a> and understand this is a lifetime commitment to the Hostell family.</label>
+        </div>
+        
+        <button type="submit" class="submit-btn">SUBMIT APPLICATION</button>
+        
+        <div id="statusMessage" class="status-message"></div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>HOSTELL AREA APPLICATION SYSTEM | STRICTLY CONFIDENTIAL | VETTING PROCESS: 7-14 DAYS</p>
+    </div>
+  </footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCszfgJNY0eRvMj_VPCcdNjC5ARht1XauQ",
+    authDomain: "hostell-fe4fa.firebaseapp.com",
+    databaseURL: "https://hostell-fe4fa-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "hostell-fe4fa",
+    storageBucket: "hostell-fe4fa.firebasestorage.app",
+    messagingSenderId: "537427453874",
+    appId: "1:537427453874:web:d9d27d7731b8cd5728a6ab"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const form = document.getElementById('registrationForm');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const inputs = document.querySelectorAll(".form-input, .form-select, .form-textarea");
+    
+    const data = {
+      streetName: inputs[0].value,
+      realName: inputs[1].value,
+      email: inputs[2].value,
+      phone: inputs[3].value,
+      city: inputs[4].value,
+      reason: inputs[5].value,
+      about: inputs[6].value,
+      time: Date.now()
+    };
+
+    push(ref(db, "applications"), data)
+      .then(() => {
+        const msg = document.getElementById("statusMessage");
+        msg.className = "status-message success";
+        msg.textContent = "✅ APPLICATION SUBMITTED!";
+        msg.style.display = "block";
+        form.reset();
+        msg.scrollIntoView({ behavior: 'smooth' });
+      })
+      .catch((err) => {
+        const msg = document.getElementById("statusMessage");
+        msg.className = "status-message error";
+        msg.textContent = "❌ ERROR SUBMITTING: " + err;
+        msg.style.display = "block";
+      });
+  });
+</script>
+</body>
+</html>
