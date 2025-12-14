@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostell Admin Panel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-image: url('https://files.catbox.moe/xnxin2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: -1;
+    }
+
+    /* Header Styles */
+    .header {
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 2px solid #444;
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      color: #4ecdc4;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Login Container */
+    .login-container {
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: 15px;
+      padding: 40px;
+      max-width: 500px;
+      margin: 40px auto;
+      border: 2px solid #444;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .login-title {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #fff;
+      font-size: 1.1rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #444;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #4ecdc4;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .error-message {
+      background: rgba(255, 107, 107, 0.2);
+      border: 1px solid #ff6b6b;
+      color: #ff6b6b;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+
+    /* Data Container */
+    .data-container {
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: 15px;
+      padding: 30px;
+      border: 2px solid #444;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      margin-top: 20px;
+      display: none;
+    }
+
+    .stats-bar {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #444;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      color: #4ecdc4;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    /* Card Grid - Sama seperti di index.html */
+    .card-grid {
+      display: flex;
+      gap: 25px;
+      padding: 20px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      position: relative;
+      width: 320px;
+      height: 420px;
+      border-radius: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 2px solid transparent;
+      background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+      flex-shrink: 0;
+      text-decoration: none;
+      display: block;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+      border-radius: 15px;
+    }
+
+    .card:hover::before {
+      opacity: 0.1;
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 65%;
+      background-size: cover;
+      background-position: center;
+      transition: all 0.5s ease;
+      position: relative;
+      background-image: url('https://files.catbox.moe/xnxin2.jpg');
+      filter: brightness(0.8);
+    }
+
+    .card:hover .card-image {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    .card-info {
+      flex: 1;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.85);
+      overflow-y: auto;
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .card-subtitle {
+      font-size: 0.9rem;
+      color: #4ecdc4;
+      margin-bottom: 15px;
+      font-style: italic;
+    }
+
+    .card-description {
+      font-size: 0.9rem;
+      color: #ccc;
+      line-height: 1.4;
+      margin-bottom: 15px;
+    }
+
+    .card-details {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+
+    .card-details div {
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .card-details span {
+      color: #fff;
+      margin-left: 5px;
+      font-weight: bold;
+    }
+
+    .card-action {
+      font-size: 0.8rem;
+      color: #4ecdc4;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    /* Status Badge */
+    .card-status {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      z-index: 10;
+    }
+
+    .card-status.new {
+      background: linear-gradient(135deg, rgba(78, 205, 196, 0.9), rgba(69, 183, 209, 0.9));
+      color: #000;
+      box-shadow: 0 0 20px rgba(78, 205, 196, 0.6);
+    }
+
+    .card-status.reviewed {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.9), rgba(0, 204, 106, 0.9));
+      color: #000;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+    }
+
+    .card-status.pending {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.9), rgba(238, 90, 82, 0.9));
+      color: #fff;
+      box-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.05);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    /* No Data Message */
+    .no-data {
+      text-align: center;
+      padding: 50px;
+      color: #888;
+      font-size: 1.2rem;
+      width: 100%;
+      grid-column: 1 / -1;
+    }
+
+    /* Logout Button */
+    .logout-btn {
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
+      padding: 10px 20px;
+      border: 1px solid #ff6b6b;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+      cursor: pointer;
+      display: block;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 107, 107, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(0, 0, 0, 0.9);
+      border-top: 1px solid #333;
+      padding: 20px 0;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer p {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .card {
+        width: 280px;
+        height: 380px;
+      }
+      
+      .card-grid {
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 20px 15px;
+      }
+      
+      .page-title {
+        font-size: 2rem;
+      }
+      
+      .login-container {
+        padding: 30px 20px;
+        margin: 20px auto;
+      }
+      
+      .data-container {
+        padding: 20px 15px;
+      }
+      
+      .stats-bar {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+      
+      .card {
+        width: 240px;
+        height: 340px;
+      }
+      
+      .card-grid {
+        gap: 15px;
+      }
+      
+      .card-info {
+        padding: 20px;
+      }
+      
+      .card-title {
+        font-size: 1.2rem;
+      }
+      
+      .card-description {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .page-title {
+        font-size: 1.8rem;
+      }
+      
+      .card {
+        width: 100%;
+        max-width: 300px;
+        height: 360px;
+      }
+      
+      .card-grid {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">HOSTELL AREA</a>
+      <a href="index.html" class="back-btn">← BACK TO HOME</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <h1 class="page-title">ADMIN PANEL</h1>
+
+    <!-- Login Container -->
+    <div id="loginContainer" class="login-container">
+      <h2 class="login-title">ADMIN ACCESS REQUIRED</h2>
+      <div class="form-group">
+        <label class="form-label">USERNAME</label>
+        <input type="text" id="userInput" class="form-input" placeholder="Enter admin username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">PASSWORD</label>
+        <input type="password" id="passInput" class="form-input" placeholder="Enter admin password">
+      </div>
+      <button onclick="login()" class="submit-btn">LOGIN</button>
+      <div id="errorMsg" class="error-message">Incorrect username or password!</div>
+    </div>
+
+    <!-- Data Container -->
+    <div id="dataContainer" class="data-container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h2 style="color: #4ecdc4; font-size: 1.5rem;">SUBMITTED APPLICATIONS</h2>
+        <button onclick="logout()" class="logout-btn">LOGOUT</button>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-number" id="totalApps">0</div>
+          <div class="stat-label">TOTAL APPLICATIONS</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="todayApps">0</div>
+          <div class="stat-label">TODAY</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="pendingApps">0</div>
+          <div class="stat-label">PENDING REVIEW</div>
+        </div>
+      </div>
+
+      <!-- Card Grid untuk Data Pendaftaran -->
+      <div class="card-grid" id="cardsContainer">
+        <!-- Data akan ditampilkan di sini dalam bentuk kartu -->
+        <div class="no-data" id="noData">No applications found. Data will appear here when users submit forms.</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>HOSTELL AREA ADMIN SYSTEM | STRICTLY CONFIDENTIAL | UNAUTHORIZED ACCESS PROHIBITED</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    // LOGIN FUNCTION
+    window.login = function() {
+      const user = document.getElementById("userInput").value;
+      const pass = document.getElementById("passInput").value;
+
+      if (user === "HOSTELL" && pass === "7FEBRUARYHOSTELL") {
+        document.getElementById("loginContainer").style.display = "none";
+        document.getElementById("dataContainer").style.display = "block";
+        document.getElementById("errorMsg").style.display = "none";
+        loadApplications();
+      } else {
+        document.getElementById("errorMsg").style.display = "block";
+        document.getElementById("userInput").value = "";
+        document.getElementById("passInput").value = "";
+      }
+    };
+
+    // LOGOUT FUNCTION
+    window.logout = function() {
+      document.getElementById("loginContainer").style.display = "block";
+      document.getElementById("dataContainer").style.display = "none";
+      document.getElementById("userInput").value = "";
+      document.getElementById("passInput").value = "";
+      document.getElementById("errorMsg").style.display = "none";
+      // Clear cards when logging out
+      document.getElementById("cardsContainer").innerHTML = '<div class="no-data" id="noData">No applications found. Data will appear here when users submit forms.</div>';
+    };
+
+    // FIREBASE
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCszfgJNY0eRvMj_VPCcdNjC5ARht1XauQ",
+      authDomain: "hostell-fe4fa.firebaseapp.com",
+      databaseURL: "https://hostell-fe4fa-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "hostell-fe4fa",
+      storageBucket: "hostell-fe4fa.firebasestorage.app",
+      messagingSenderId: "537427453874",
+      appId: "1:537427453874:web:d9d27d7731b8cd5728a6ab"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Function to load applications
+    function loadApplications() {
+      const cardsContainer = document.getElementById("cardsContainer");
+      
+      onValue(ref(db, "applications"), snapshot => {
+        cardsContainer.innerHTML = "";
+        let total = 0;
+        let today = 0;
+        const todayDate = new Date().toDateString();
+        
+        // Check if there are no applications
+        if (!snapshot.exists()) {
+          cardsContainer.innerHTML = '<div class="no-data">No applications found. Data will appear here when users submit forms.</div>';
+          document.getElementById("totalApps").textContent = "0";
+          document.getElementById("todayApps").textContent = "0";
+          document.getElementById("pendingApps").textContent = "0";
+          return;
+        }
+        
+        // Collect applications
+        const applications = [];
+        
+        snapshot.forEach(child => {
+          const data = child.val();
+          data.id = child.key;
+          applications.push(data);
+        });
+        
+        // Sort by time (newest first)
+        applications.sort((a, b) => {
+          return new Date(b.time || 0) - new Date(a.time || 0);
+        });
+        
+        // Create a card for each application
+        applications.forEach((app, index) => {
+          total++;
+          
+          // Check if application is from today
+          const appDate = new Date(app.time).toDateString();
+          if (appDate === todayDate) {
+            today++;
+          }
+          
+          // Create card element
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.title = `Click to view details of ${app.realName || 'Applicant'}`;
+          
+          // Truncate long text
+          const truncateText = (text, maxLength = 100) => {
+            if (!text) return 'Not provided';
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+          };
+          
+          // Format time
+          const formatTime = (timestamp) => {
+            if (!timestamp) return 'Unknown';
+            const date = new Date(timestamp);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+          };
+          
+          // Card content
+          card.innerHTML = `
+            <div class="card-content">
+              <div class="card-image"></div>
+              <div class="card-status new">NEW</div>
+              <div class="card-info">
+                <div class="card-title">${app.realName || 'Anonymous Applicant'}</div>
+                <div class="card-subtitle">"${app.streetName || 'No Street Name'}"</div>
+                <div class="card-description">
+                  ${truncateText(app.reason || 'No reason provided', 80)}
+                </div>
+                <div class="card-details">
+                  <div>📍 City: <span>${app.city || 'Not specified'}</span></div>
+                  <div>📧 Email: <span>${truncateText(app.email, 25) || 'Not provided'}</span></div>
+                  <div>📱 Phone: <span>${app.phone || 'Not provided'}</span></div>
+                  <div>🕐 Submitted: <span>${formatTime(app.time)}</span></div>
+                </div>
+                <div class="card-action">APPLICATION #${index + 1} →</div>
+              </div>
+            </div>
+          `;
+          
+          // Add click event to show more details
+          card.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert(
+              `APPLICATION DETAILS\n\n` +
+              `Real Name: ${app.realName || 'Not provided'}\n` +
+              `Street Name: ${app.streetName || 'Not provided'}\n` +
+              `Email: ${app.email || 'Not provided'}\n` +
+              `Phone: ${app.phone || 'Not provided'}\n` +
+              `City: ${app.city || 'Not provided'}\n` +
+              `Reason: ${app.reason || 'Not provided'}\n` +
+              `About: ${app.about || 'Not provided'}\n\n` +
+              `Submitted: ${formatTime(app.time)}\n` +
+              `Application ID: ${app.id.substring(0, 8)}...`
+            );
+          });
+          
+          cardsContainer.appendChild(card);
+        });
+
+        // Update stats
+        document.getElementById("totalApps").textContent = total;
+        document.getElementById("todayApps").textContent = today;
+        document.getElementById("pendingApps").textContent = total;
+      });
+    }
+  </script>
+</body>
+</html>
